@@ -1,0 +1,169 @@
+
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Multiclass Protein Classification</title>
+        <style>
+        <!--
+            body{
+                font-family: 'Trebuchet MS', Verdana;
+                background-color:#FFFFFF;
+            }
+            p{
+                font-family: 'Trebuchet MS', Times;
+                margin: 10px 10px 15px 20px;
+            }
+            h3{
+                margin: 5px;
+            }
+            h2{
+                margin: 10px;
+            }
+            h1{
+                margin: 10px 0px 0px 20px;
+            }
+            div.main-body{
+                align:center;
+                margin: 30px;
+            }
+            hr{
+                margin:20px 0px 20px 0px;
+            }
+        -->
+        </style>
+    </head>
+
+    <body>
+        <center>
+            <a href="http://www.bu.edu/"><img border="0" src="./images/bu-logo.gif" width="119" height="120"></a>
+        </center>
+
+        <h1>Multiclass Protein Classification</h1>
+        <p> 
+        CS585 Final Project Report<br>
+        Ben Gaudiosi<br>
+        Mertcan Cokbas<br>
+        Vugar Javadov<br>
+        <br>
+        </p>
+
+        <div class="main-body">
+        <hr>
+        <h2> Project Motivation </h2>
+        <p>
+        In November 2018, the Human Protein Atlas started a competition hosted on Kaggle, a hub for data science and machine learning, with the goal of creating a protein locator algorithm. Such an algorithm would be extremely useful in biomedical research and imaging to help with the development of new medicine.
+        </p>
+        
+        <hr>
+        <h2> Goals </h2>
+        There are 28 different possible protein locations, and our goal is to create an algorithm that looks at an image and decides where the proteins are located in that image. We created a "random" labeller (informed by the distribution of training data) that performed with an accuracy of about 0.05. 
+        <br>
+        <img alt="Random Labeller" src="./images/random.png" width="300">
+        <br>
+        This random labeller acts as our baseline, which we hoped to perform better than.
+
+        <hr>
+        <h2> Data </h2>
+        <p>
+        We were given a dataset of 31702 labelled training images. These images are chemically stained microscope images. Each of these images is split into 4 channels, where each 'color' is a different staining, as seen below.
+        <br>
+        <img alt="Four Channels" src="./images/4channels.png" width=500>
+        <br>
+        When combined the images look like the following:
+        <br><br>
+        <img alt="Combined" src="./images/combined.png" width=300>
+        <br><br>
+        The dataset labels appeared in the training images with the following distribution:
+        <br><br>
+        <img alt="distribution" src="./images/Imbalanced.png" width=500>
+        <br><br>
+
+        <img alt="counts" src="./images/counts.png" width=400>
+        <br><br>
+        The above information was used to design our random labeller. It's clear that there is a data imbalance, where several of our labels hardly appear at all. 
+        </p>
+        
+        <hr>
+        <h2> Image Augmentation </h2>
+        To attempt to combat the lack of data, we applied of the computer vision techniques we've learned.
+        <ul>
+            <li>Scaling</li>
+            <li>Translation</li>
+            <li>Flipping</li>
+            <li>Gaussian Blur</li>
+            <li>Gaussian Noise</li>
+
+        This resulted in some improvement in the accuracy of our model, but it wasn't all that significant, unfortunately.
+        <hr>
+        <h2>Strategy: Convolutional Neural Networks</h2>
+        We created two convolutional neural networks. The first ran on 128x128px images, with 5 layers - 4 convolutional layers and a fully connected layer at the end. We also applied batch normalization, ReLU activation, and a dropout of 0.1 after each layer.
+        <br><br>
+        The second was similar, though it ran on 256x256px images and had 6 convolutional layers.
+
+        <hr>
+        <h2> Evaluation </h2>
+        <p>
+        The first model took about 12 hours to train. It resulted in testing F1 score of 0.232.
+        <br><br>
+        <img src="./images/model_1_graph.png" width=400px>
+        <br><br>
+        The second model performed better with a tesing F1 score of 0.264, though it had some overfitting.
+        <br><br>
+        <img src="./images/model_2_accuracy.png" width=400px>
+        <br><br>
+        <img src="./images/model_2_loss.png" width=400px>
+        <br><br>
+        <img src="./images/model_2_f1.png" width=400px>
+        <br><br>
+        </p>
+
+        <hr>
+        <h2> Improvement: Optimal Thresholding </h2>
+        <p>
+        While training the model, we used a constant threshold to make an F1 score, which resulted in suboptimal labelling. In order to improve upon our models, we came up with an algorithm to create an optimal threshold on the validation data.
+        <br><br>
+        <center><img src="./images/math.png" width=500px></center>
+        <br><br>
+
+        This improved our validation accuracy significantly. However, on the testing data, it's unclear if it made a large impact.
+        <br><br>
+        The following is the confusion matrix of our results:
+        <br><br>
+        <center><img src="./images/confusion.png" width=300px></center>
+        <br><br>
+        This gives us a Correct Classifcation Rate (CCR) of 78.18%. Clearly, how well we did here depends on the metric we use.
+        </p>
+
+        <hr>
+        <h2> Discussion </h2>
+        <p>
+        First of all, this is a very difficult problem - 28 labels with highly imbalanced data would fool even the finest tuned deep learning models.
+        <br><br>
+        Second, we were quite limited by hardware - the first model took 12 hours to train, and the second 40. If we had some high end GPUs, we could play around with the models a bit more, but without that we had no such opportunity.
+        <br><br>
+        Finally, it's unclear that the F1 score was the best metric to use in this situation.
+        </p>
+
+        <hr>
+        <h2> Conclusion and Future Work </h2>
+        <p>
+        There is definitely a lot of room for improvement with more data - some of the smallest classes had less than 50 images to train on.
+        <br><br>
+        Perhaps if we had first classified by cell type, we would better be informed to which proteins would be possible to be present.
+        <br><br>
+        Finally, with more time and better hardware, different deep learning models could be experimented on that would perhaps give better results.
+        </p>
+        <hr>
+        <h2> References </h2>
+        F1 Score for Keras: https://www.kaggle.com/guglielmocamporese/macro-f1-score-keras
+        Dealing with large dataset in Keras: https://stanford.edu/~shervine/blog/keras-how-to-generate-data-on-the-fly
+
+        Image augmentation library: https://imgaug.readthedocs.io/en/latest/source/examples_basics.html
+
+        Adding dropout after every layer: http://mipal.snu.ac.kr/images/1/16/Dropout_ACCV2016.pdf
+
+        Early stopping during training: https://github.com/keras-team/keras/blob/master/keras/callbacks.py#L460
+        
+        </div>
+    </body>
+</html>

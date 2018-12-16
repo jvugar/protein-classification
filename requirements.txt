@@ -1,0 +1,12 @@
+numpy
+pandas
+scipy
+matplotlib
+opencv-python
+keras
+jupyter
+tensorflow>=1.12
+sklearn
+imgaug
+pydot
+keras-tqdm

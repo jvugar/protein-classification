@@ -1,0 +1,133 @@
+
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Multiclass Protein Classification</title>
+        <style>
+        <!--
+            body{
+                font-family: 'Trebuchet MS', Verdana;
+                background-color:#FFFFFF;
+            }
+            p{
+                font-family: 'Trebuchet MS', Times;
+                margin: 10px 10px 15px 20px;
+            }
+            h3{
+                margin: 5px;
+            }
+            h2{
+                margin: 10px;
+            }
+            h1{
+                margin: 10px 0px 0px 20px;
+            }
+            div.main-body{
+                align:center;
+                margin: 30px;
+            }
+            hr{
+                margin:20px 0px 20px 0px;
+            }
+        -->
+        </style>
+    </head>
+
+    <body>
+        <center>
+            <a href="http://www.bu.edu/"><img border="0" src="./images/bu-logo.gif" width="119" height="120"></a>
+        </center>
+
+        <h1>Multiclass Protein Classification</h1>
+        <p> 
+        CS585 Final Project Progress Report<br>
+        Ben Gaudiosi<br>
+        Mertcan Cokbas<br>
+        Vugar Javadov<br>
+        <br>
+        </p>
+
+        <div class="main-body">
+        <hr>
+        <h2> Problem Definition </h2>
+        <p>
+        In Kaggle (a website which opens competitions for data science problems), there is a competition called
+        “Human Protein Atlas Image Classification”. In this competition, dataset and ground truths are given by
+        Kaggle. In the dataset there are 28 different labels for 31072 training images. Our main goal in this project is to
+        implement a system which classifies 28 different protein locations and label the images accordingly.
+        </p>
+        
+        <hr>
+        <h2> Background Research </h2>
+        Nowadays, computer vision and machine learning algorithms are frequently used at the same time.
+        The following paper [1] is a good example of this, where they evaluate blood parameters.
+        They used computer vision techniques such as Canny Edge Detection, Morphological Operators and
+        Thresholding for segmentation and pre-processing. After this stage is completed, the output of this stage is
+        fed into machine learning systems such as SVMs (Support Vector Machines) and Neural Networks.
+        The application and final results of this paper are not very related to our project, but the approach to
+        solving the problem can be useful to give us an idea of how to combine computer vision techniques and
+        machine learning algorithms. Another research group [2] focused on an application similar to our
+        problem where their main tool was again SVMs, but in their application, the number of different types of
+        proteins was much lower compared to ours.
+        
+        <hr>
+        <h2> Input Images </h2>
+        <p>
+        Kaggle has provided us with a training dataset of 31072 images. They are split into 4 color channels - red, green, blue, and yellow, where each channel
+        represents a different part of the cell being stained. Here is an example:
+        <br>
+        <img alt="Four channels" src="./images/four_channels.png" width="590" height="590">
+        <br>
+        When you combine them into an RGB image, you get something that looks like this:
+        <br><br>
+        <img alt="Combined" src="./images/combined.png" width="274" height="274">
+        </p>
+        <hr>
+        <h2> Expected Output </h2>
+        There are 28 different labels, and each image can have any amount of them, though in the training dataset, the maximum number of labels is five.
+        We will output a CSV file full of labelings and use some kind of validiation metric to evaluate our model. To visualize this, we've provided
+        three different images we manually labelled. 
+        <br><br>
+        <center>
+        <table>
+        <tbody>
+            <tr>
+                <td><img alt="First" src="./images/first_sample.png" width="256" height="256"></td>
+                <td><img alt="Second" src="./images/second_sample.png" width="256" height="256"></td>
+                <td><img alt="Third" src="./images/third_sample.png" width="256" height="256"></td>
+            </tr>
+        </tbody>
+        </table>
+        </center>
+
+        <hr>
+        <h2>Our Work so Far</h2>
+        Currently, we're doing some analysis on the given training data to develop a random labelling for the images, which will give us a baseline
+        success rate to beat. As soon as that is finished, we'll begin working on a Convolutional Neural Network that will label these images for us.
+        <table>
+        <tbody>
+            <tr>
+                <td> <img alt="Label Frequencies" src="./images/frequency.png" width="453" height="517"></td>
+            </tr>
+            <tr>
+                <td><img alt="Number of Labels" src="./images/counts.png" width="272" height="195"></td>
+            </tr>
+        </tbody>
+        </table>
+        
+        <hr>
+        <h2> Credits and Bibliography </h2>
+        <p>
+        [1] V. Bevilacqua et al., &quot;A novel approach to evaluate blood parameters using computer vision
+        techniques,&quot; 2016 IEEE International Symposium on Medical Measurements and Applications (MeMeA),
+        Benevento, 2016, pp. 1-6.
+        <br>
+        [2] J. Y. Newberg et al., &quot;Automated analysis of Human Protein Atlas immunofluorescence images,&quot; 2009
+        IEEE International Symposium on Biomedical Imaging: From Nano to Macro, Boston, MA, 2009, pp.
+        1023-1026.
+        </p>
+
+        <hr>
+        </div>
+    </body>
+</html>
